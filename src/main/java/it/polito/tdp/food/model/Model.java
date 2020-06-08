@@ -1,5 +1,6 @@
 package it.polito.tdp.food.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jgrapht.Graph;
@@ -38,6 +39,16 @@ public class Model {
 
 //		System.out.println(this.graph);
 
+	}
+	
+	public List<PorzioneAdiacente> getAdiacenti(String porzione) {
+		List<String> vicini = Graphs.neighborListOf(this.graph, porzione) ;
+		List<PorzioneAdiacente> result = new ArrayList<>();
+		for(String v: vicini) {
+			double peso = this.graph.getEdgeWeight(this.graph.getEdge(porzione, v)) ;
+			result.add(new PorzioneAdiacente(v, peso)) ;
+		}
+		return result ;
 	}
 
 	public List<String> getVerticiGrafo() {
