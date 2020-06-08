@@ -40,7 +40,7 @@ public class FoodController {
     private Button btnCammino; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxPorzioni"
-    private ComboBox<?> boxPorzioni; // Value injected by FXMLLoader
+    private ComboBox<String> boxPorzioni; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -69,7 +69,12 @@ public class FoodController {
     		return ;
     	}
     	
-    	model.creaGrafo(C);
+    	String msg = model.creaGrafo(C);
+    	txtResult.appendText(msg);
+    	
+    	boxPorzioni.getItems().clear();
+    	boxPorzioni.getItems().addAll(model.getVerticiGrafo()) ;
+    	
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
