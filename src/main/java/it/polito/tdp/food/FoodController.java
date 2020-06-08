@@ -60,9 +60,16 @@ public class FoodController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-    	txtResult.clear();
-    	txtResult.appendText("Creazione grafo...");
+    	String cs = txtCalorie.getText();
+    	Integer C ;
+    	try {
+    		C = Integer.parseInt(cs) ;
+    	} catch (NumberFormatException ex) {
+    		txtResult.appendText("ERRORE: il valore "+cs+" non è un valido numero intero\n");
+    		return ;
+    	}
     	
+    	model.creaGrafo(C);
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete

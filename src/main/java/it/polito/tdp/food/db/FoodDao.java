@@ -11,6 +11,39 @@ import it.polito.tdp.food.model.Food;
 import it.polito.tdp.food.model.Portion;
 
 public class FoodDao {
+	
+	public List<String> getPortionDisplayNames(int C) {
+		String sql = "SELECT DISTINCT portion_display_name " + 
+				"FROM `portion` " + 
+				"WHERE calories<? " + 
+				"ORDER BY portion_display_name" ;
+		
+		try {
+			Connection conn = DBConnect.getConnection() ;
+
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			
+			st.setInt(1, C);
+			
+			ResultSet res = st.executeQuery() ;
+			
+			List<String> result = new ArrayList<>() ;
+			
+			while(res.next()) {
+				result.add( res.getString("portion_display_name"));
+			}
+			
+			conn.close();
+			return result ;
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null ;
+		}
+		
+	}
+	
 	public List<Food> listAllFoods(){
 		String sql = "SELECT * FROM food" ;
 		try {
