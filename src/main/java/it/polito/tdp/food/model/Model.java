@@ -15,6 +15,11 @@ public class Model {
 	private Graph<String, DefaultWeightedEdge> graph;
 	private List<String> vertici;
 
+	// variabili per lo stato della ricorsione
+	private double pesoMax ;
+
+	private List<String> camminoMax ;
+	
 	public String creaGrafo(int C) {
 
 		FoodDao dao = new FoodDao();
@@ -54,5 +59,68 @@ public class Model {
 	public List<String> getVerticiGrafo() {
 		return this.vertici;
 	}
+	
+	/*
+	[ v1 v2 v3 v4 ] -> lungo N
+	Soluzione parziale: un cammino che parte dal vertice iniziale
+	Livello: lunghezza del camminio parziale
+	Condizione di terminazione: Cammino ha lunghezza N (cioè N+1 vertici)
+	Funzione da valutare: peso del cammino
+	Generazione delle soluzioni: aggiungere gli adiacenti che non siano ancora
+	presenti nel cammino
+	Avvio della ricorsione: 1 vertice (di partenza)
+		[ partenza ] , livello = 1
+		[ partenza, v ] , livello = 2
+		[ partenza, v2, v3, v4, .... v(N+1) ], livello = N+1  
+	*/
+	
+	public void cercaCammino(String partenza, int N) {
+		this.camminoMax = null ;
+		this.pesoMax = 0.0 ;
+		
+		List<String> parziale = new ArrayList<>() ;
+		parziale.add(partenza) ;
+		
+		search(parziale, 1, N);
+	}
+	
+	private void search(List<String> parziale, int livello, int N) {
+		
+		if(livello == N+1) {
+			double peso = pesoCammino(parziale) ;
+			if(peso>this.pesoMax) {
+				this.pesoMax=peso ;
+				this.camminoMax = new ArrayList<>(parziale);
+			}
+			return ;
+		}
+		
+		List<String> vicini = Graphs.neighborListOf(this.graph, parziale.get(livello-1)) ;
+		for(String v : vicini) {
+			if(!parziale.contains(v)) {
+				parziale.add(v) ;
+				search(parziale, livello+1, N) ;
+				parziale.remove(parziale.size()-1) ;
+			}
+		}
+	}
+
+	private double pesoCammino(List<String> parziale) {
+		double peso = 0.0 ;
+		for(int i=1; i<parziale.size(); i++) {
+			double p = this.graph.getEdgeWeight(this.graph.getEdge(parziale.get(i-1), parziale.get(i))) ;
+			peso += p ;
+		}
+		return peso ;
+	}
+	
+	public double getPesoMax() {
+		return pesoMax;
+	}
+
+	public List<String> getCamminoMax() {
+		return camminoMax;
+	}
+
 
 }
