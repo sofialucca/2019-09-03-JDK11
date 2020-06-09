@@ -49,7 +49,7 @@ public class FoodDao {
 		String sql = "SELECT P1.portion_display_name AS NAME1, P2.portion_display_name AS NAME2, COUNT(DISTINCT P1.food_code) AS CNT " + 
 				"FROM `portion` P1, `portion` P2 " + 
 				"WHERE P1.food_code=P2.food_code " + 
-				"AND P1.portion_id<>P2.portion_id " + 
+				"AND P1.portion_display_name<>P2.portion_display_name " + 
 				"GROUP BY P1.portion_display_name, P2.portion_display_name" ;
 		
 		try {
