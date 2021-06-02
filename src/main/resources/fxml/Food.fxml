@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="473.0" prefWidth="428.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.food.FoodController">
+<BorderPane prefHeight="473.0" prefWidth="428.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polito.tdp.food.FoodController">
    <top>
       <Label text="Esame 03/09/2019" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -46,18 +46,18 @@
                      </GridPane.margin>
                   </Label>
                   <TextField fx:id="txtCalorie" GridPane.columnIndex="1" />
-                  <TextField fx:id="txtPassi" prefWidth="129.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtPassi" disable="true" prefWidth="129.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <Button fx:id="btnAnalisi" mnemonicParsing="false" onAction="#doCreaGrafo" prefWidth="80.0" text="Analisi" GridPane.columnIndex="2">
                      <GridPane.margin>
                         <Insets right="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnCorrelate" mnemonicParsing="false" onAction="#doCorrelate" prefWidth="80.0" text="Correlate" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                  <Button fx:id="btnCorrelate" disable="true" mnemonicParsing="false" onAction="#doCorrelate" prefWidth="80.0" text="Correlate" GridPane.columnIndex="2" GridPane.rowIndex="1">
                      <GridPane.margin>
                         <Insets right="20.0" />
                      </GridPane.margin>
                   </Button>
-                  <Button fx:id="btnCammino" mnemonicParsing="false" onAction="#doCammino" prefWidth="80.0" text="Cammino" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                  <Button fx:id="btnCammino" disable="true" mnemonicParsing="false" onAction="#doCammino" prefWidth="80.0" text="Cammino" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <GridPane.margin>
                         <Insets right="20.0" />
                      </GridPane.margin>
@@ -67,10 +67,10 @@
                         <Insets right="10.0" />
                      </GridPane.margin>
                   </Label>
-                  <ComboBox fx:id="boxPorzioni" prefHeight="27.0" prefWidth="191.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <ComboBox fx:id="boxPorzioni" disable="true" prefHeight="27.0" prefWidth="191.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
-            <TextArea fx:id="txtResult" prefHeight="354.0" prefWidth="300.0">
+            <TextArea fx:id="txtResult" editable="false" prefHeight="354.0" prefWidth="300.0">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>

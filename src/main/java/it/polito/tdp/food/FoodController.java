@@ -5,6 +5,7 @@
 package it.polito.tdp.food;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import it.polito.tdp.food.model.Model;
@@ -49,10 +50,49 @@ public class FoodController {
     @FXML
     void doCammino(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Cerco cammino peso massimo...");
+    	if(!isValid()) {
+    		return;
+    	}
+    	int n = Integer.parseInt(this.txtPassi.getText());
+    	String por = this.boxPorzioni.getValue();
+    	List<String> result = model.getCammino(n, por);
+    	
+    	if(result.isEmpty()) {
+    		txtResult.appendText("NON ESISTE UN CAMMINO DI " + n + " PASSI A PARTIRE DALLA PORZIONE " + por);
+    	}else{
+    		txtResult.appendText("CAMMINO DI " + n + " PASSI DA " + por);
+    		txtResult.appendText("\n\nCOSTO TOTALE = " + model.getCostoCammino());
+    		for(String s: result) {
+    			txtResult.appendText("\n" + s);
+    		}
+    	}
     }
 
-    @FXML
+    private boolean isValid() {
+    	boolean check = true;
+    	if(this.boxPorzioni.getValue() == null) {
+    		txtResult.appendText("ERRORE: selezionare un tipo di porzione\n");
+    		check = false;
+    	}
+    	String n = this.txtPassi.getText();
+    	if(n.equals("")) {
+    		txtResult.appendText("ERRORE: inserire un numero di passi");
+    		return false;
+    	}else {
+    		try {
+	    			if(Integer.parseInt(n) <= 0) {
+	    				txtResult.appendText("ERRORE: il numero di passi deve essere un numero intero positivo.");
+	    				return false;
+	    			}
+    			}catch(NumberFormatException nfe) {
+    				txtResult.appendText("ERRORE: il numero di passi deve essere un numero intero");
+    				return false;
+    			}
+    		}
+		return check;
+	}
+
+	@FXML
     void doCorrelate(ActionEvent event) {
     	txtResult.clear();
     	String s = this.boxPorzioni.getValue();

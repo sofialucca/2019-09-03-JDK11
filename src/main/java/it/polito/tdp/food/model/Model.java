@@ -1,5 +1,6 @@
 package it.polito.tdp.food.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ public class Model {
 	
 	private Graph<String,DefaultWeightedEdge> grafo;
 	private List<String> vertici;
+	private List<String> risultatoCammino;
+	private int camminoOttimo;
 	private FoodDao dao;
 	
 	public Model() {
@@ -50,5 +53,40 @@ public class Model {
 			result.put(s, (int) grafo.getEdgeWeight(e));
 		}
 		return result;
+	}
+	
+	public List<String> getCammino(int n, String partenza){
+		risultatoCammino = new ArrayList<>();
+		camminoOttimo = 0;
+		List<String> parziale = new ArrayList<>();
+		parziale.add(partenza);
+		cerca(parziale, partenza, 0, n);
+		return risultatoCammino;
+	}
+
+	private void cerca(List<String> parziale, String precedente, int costoCammino, int passiMax) {
+		if(parziale.size()-1 == passiMax) {
+			if(costoCammino>camminoOttimo) {
+				camminoOttimo = costoCammino;
+				risultatoCammino = new ArrayList<>(parziale);
+			}
+			return;
+		}else {
+			for(String s : Graphs.neighborListOf(grafo, precedente)) {
+				if(!parziale.contains(s)) {
+					parziale.add(s);
+					DefaultWeightedEdge e = grafo.getEdge(s, precedente);
+					int nuovoCosto = (int) grafo.getEdgeWeight(e) + costoCammino;
+					cerca(parziale, s, nuovoCosto, passiMax);
+					parziale.remove(s);
+				}
+			}
+		}
+		
+		
+	}
+	
+	public int getCostoCammino() {
+		return this.camminoOttimo;
 	}
 }
