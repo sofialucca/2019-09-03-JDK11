@@ -5,6 +5,7 @@
 package it.polito.tdp.food;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 import it.polito.tdp.food.model.Model;
 import javafx.event.ActionEvent;
@@ -40,7 +41,7 @@ public class FoodController {
     private Button btnCammino; // Value injected by FXMLLoader
 
     @FXML // fx:id="boxPorzioni"
-    private ComboBox<?> boxPorzioni; // Value injected by FXMLLoader
+    private ComboBox<String> boxPorzioni; // Value injected by FXMLLoader
 
     @FXML // fx:id="txtResult"
     private TextArea txtResult; // Value injected by FXMLLoader
@@ -54,18 +55,63 @@ public class FoodController {
     @FXML
     void doCorrelate(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Cerco porzioni correlate...");
-    	
+    	String s = this.boxPorzioni.getValue();
+    	if(s == null) {
+    		txtResult.appendText("ERRORE: selezionare un tipo di porzione");
+    		return;
+    	}
+    	Map<String,Integer> result = model.getCorrelate(s);
+    	if(result.isEmpty()) {
+    		txtResult.appendText("NON VI SONO PORZIONI CORRELATE A " + s);
+    	}else {
+    		txtResult.appendText("PORZIONI CORRELATE A " + s + ":\n");
+    		for(String str: result.keySet()) {
+    			txtResult.appendText("\n" + str + " - " + result.get(str));
+    		}
+    	}    	
     }
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
     	txtResult.clear();
-    	txtResult.appendText("Creazione grafo...");
+    	if(!isValidGrafo()) {
+    		return;
+    	}
+    	double cal = Double.parseDouble(txtCalorie.getText());
+    	model.creaGrafo(cal);
+    	this.boxPorzioni.getItems().setAll(model.getVertici());
     	
+    	txtResult.appendText("GRAFO CREATO:\n");
+    	txtResult.appendText("#vertci: " + model.getVertici().size());
+    	txtResult.appendText("\n#archi: " + model.getEdgeSize());
+    	
+    	this.boxPorzioni.setDisable(false);
+    	this.btnCorrelate.setDisable(false);
+    	this.txtPassi.setDisable(false);
+    	this.btnCammino.setDisable(false);
     }
 
-    @FXML // This method is called by the FXMLLoader when initialization is complete
+    private boolean isValidGrafo() {
+		String cal = this.txtCalorie.getText();
+		if(cal.equals("")) {
+			txtResult.appendText("ERRORE: inserire un valore per le calorie");
+			return false;
+		}else{
+			try {
+				double num = Double.parseDouble(cal);
+				if(num <= 0) {
+					txtResult.appendText("ERRORE: calorie devono essere un numero maggiore di 0");
+					return false;
+				}
+			}catch(NumberFormatException nfe) {
+				txtResult.appendText("ERRORE: calorie devono essere un numero.");
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@FXML // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
         assert txtCalorie != null : "fx:id=\"txtCalorie\" was not injected: check your FXML file 'Food.fxml'.";
         assert txtPassi != null : "fx:id=\"txtPassi\" was not injected: check your FXML file 'Food.fxml'.";
